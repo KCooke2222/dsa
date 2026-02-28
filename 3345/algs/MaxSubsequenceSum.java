@@ -1,3 +1,4 @@
+package algs;
 // divide and conquer solution O(nlogn)
 private static int maxSumRec( int [] a, int l, int r) {
     // base

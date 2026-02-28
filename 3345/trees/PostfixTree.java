@@ -1,3 +1,4 @@
+package trees;
 // postfix -> binary tree
 // infix output
 
