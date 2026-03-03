@@ -5,7 +5,7 @@ import java.util.*;
 
 import lists.MyArrayList;
 
-public class BinaryTree<T extends Comparable<? super T>> implements Iterable<T> { 
+public class BinaryTree<T extends Comparable<? super T>> implements Iterable<T> {
     private static class Node<T> {
         T data;
         Node<T> left;
@@ -24,7 +24,7 @@ public class BinaryTree<T extends Comparable<? super T>> implements Iterable<T> 
 
     private int size;
     private Node<T> root;
-    
+
     // create null
     public BinaryTree() {
         this.size = 0;
@@ -37,16 +37,17 @@ public class BinaryTree<T extends Comparable<? super T>> implements Iterable<T> 
         this.root = new Node(data);
     }
 
-
-    public boolean containsNumber(int x) {
-        contains(x, root);
+    public boolean isEmpty() {
+        return size == 0;
     }
 
-    
-    // infix print (inorder traversal)
-    // need parantheses
-    // if node is a leaf: print data
-    // else: print ( left data right )
+    public void clear() {
+        root = null;
+    }
+
+    public int size() {
+        return size;
+    }
 
     public Iterator<T> iterator() {
         return inorderIterator();
@@ -60,14 +61,13 @@ public class BinaryTree<T extends Comparable<? super T>> implements Iterable<T> 
         return new PreorderIterator();
     }
 
-     public Iterator<T> postorderIterator() {
+    public Iterator<T> postorderIterator() {
         return new PostorderIterator();
     }
 
-     public Iterator<T> levelorderIterator() {
+    public Iterator<T> levelorderIterator() {
         return new LevelOrderIterator();
     }
-
 
     // Uses stack to perform inorder as iterator cannot be recursive
     private class InorderIterator implements Iterator<T> {
@@ -77,13 +77,14 @@ public class BinaryTree<T extends Comparable<? super T>> implements Iterable<T> 
         public boolean hasNext() {
             return cur != null || !st.isEmpty();
         }
-        
+
         public T next() {
             while (cur != null) {
                 st.push(cur);
                 cur = cur.left;
             }
-            if (st.isEmpty()) throw new NoSuchElementException();
+            if (st.isEmpty())
+                throw new NoSuchElementException();
 
             Node<T> n = st.pop(); // visit the node
             T val = n.data;
@@ -111,9 +112,10 @@ public class BinaryTree<T extends Comparable<? super T>> implements Iterable<T> 
         public boolean hasNext() {
             return !st.isEmpty();
         }
-        
+
         public T next() {
-            if (st.isEmpty()) throw new NoSuchElementException();
+            if (st.isEmpty())
+                throw new NoSuchElementException();
 
             Node<T> n = st.pop(); // visit the node
             T val = n.data;
@@ -134,10 +136,79 @@ public class BinaryTree<T extends Comparable<? super T>> implements Iterable<T> 
         }
     }
 
+    // l r n
     private class PostorderIterator implements Iterator<T> {
-        
-    }
-    private class LevelOrderIterator implements Iterator<T> {
+        private final Deque<Node<T>> st = new ArrayDeque<>();
+        private Node<T> cur = root;
+        private Node<T> lastVisited;
 
+        public boolean hasNext() {
+            return cur != null || !st.isEmpty();
+        }
+
+        public T next() {
+            if (!hasNext())
+                throw new NoSuchElementException();
+
+            while (true) {
+                // left
+                while (cur != null) {
+                    st.push(cur);
+                    cur = cur.left;
+                }
+
+                // right
+                Node<T> peek = st.peek();
+                if (peek.right != null && peek.right != lastVisited) {
+                    cur = peek.right;
+                } else {
+                    Node<T> n = st.pop();
+                    lastVisited = n;
+                    return n.data;
+                }
+            }
+
+        }
+
+        public void remove() {
+            throw new UnsupportedOperationException();
+        }
+    }
+
+    private class LevelOrderIterator implements Iterator<T> {
+        private final Deque<Node<T>> q = new ArrayDeque<>();
+        private Node<T> cur = root;
+
+        public LevelOrderIterator() {
+            if (root != null) {
+                q.addLast(root);
+            }
+        }
+
+        public boolean hasNext() {
+            return !q.isEmpty();
+        }
+
+        public T next() {
+            if (!hasNext())
+                throw new NoSuchElementException();
+
+            cur = q.removeFirst();
+
+            if (cur.left != null) {
+                q.addLast(cur.left);
+            }
+
+            if (cur.right != null) {
+                q.addLast(cur.right);
+            }
+
+            return cur.data;
+
+        }
+
+        public void remove() {
+            throw new UnsupportedOperationException();
+        }
     }
 }
