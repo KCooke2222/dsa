@@ -6,7 +6,7 @@ import java.util.*;
 import lists.MyArrayList;
 
 public class BinaryTree<T extends Comparable<? super T>> implements Iterable<T> {
-    private static class Node<T> {
+    protected static class Node<T> {
         T data;
         Node<T> left;
         Node<T> right;
@@ -32,13 +32,13 @@ public class BinaryTree<T extends Comparable<? super T>> implements Iterable<T> 
     }
 
     // create w/ data
-    public BinaryTree(T data) {
+    public BinaryTree(Node<T> root) {
         this.size = 1;
-        this.root = new Node(data);
+        this.root = root;
     }
 
     public boolean isEmpty() {
-        return size == 0;
+        return size == 0; // not really useful here (is just base bt)
     }
 
     public void clear() {
@@ -47,6 +47,10 @@ public class BinaryTree<T extends Comparable<? super T>> implements Iterable<T> 
 
     public int size() {
         return size;
+    }
+
+    public Node<T> getRoot() {
+        return root;
     }
 
     public Iterator<T> iterator() {
