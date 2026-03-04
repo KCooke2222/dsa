@@ -84,7 +84,10 @@ public class BinarySearchTree<T extends Comparable<? super T>> extends BinaryTre
     }
 
     public T findMax() {
-        return findMax(root).data;
+        Node<T> n = findMax(root);
+        if (n == null)
+            throw new IllegalStateException("empty tree");
+        return n.data;
     }
 
     private Node<T> findMax(Node<T> t) {
@@ -96,7 +99,10 @@ public class BinarySearchTree<T extends Comparable<? super T>> extends BinaryTre
     }
 
     public T findMin() {
-        return findMin(root).data;
+        Node<T> n = findMin(root);
+        if (n == null)
+            throw new IllegalStateException("empty tree");
+        return n.data;
     }
 
     private Node<T> findMin(Node<T> t) {
