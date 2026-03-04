@@ -1,7 +1,20 @@
 package trees;
 
-public class BinarySearchTree {
-        private boolean contains(T x, Node<T> t) {
+public class BinarySearchTree<T extends Comparable<? super T>> extends BinaryTree<T> {
+
+    public BinarySearchTree() {
+        super();
+    }
+
+    public BinarySearchTree(T rootValue) {
+        super(new Node<>(rootValue)); // one-node tree
+    }
+
+    public boolean contains(T x) {
+        return contains(x, root);
+    }
+
+    private boolean contains(T x, Node<T> t) {
         if (t == null) {
             return false;
         }
@@ -10,26 +23,87 @@ public class BinarySearchTree {
 
         if (comparison > 0) {
             return contains(x, t.right);
-        } else if (comparison < 0){
+        } else if (comparison < 0) {
             return contains(x, t.left);
         } else {
             return true;
         }
     }
 
-    private Node<T> findMin(Node<T> t) {
+    public void insert(T x) {
+        root = insert(x, root);
+    }
+
+    private Node<T> insert(T x, Node<T> t) {
         if (t == null)
-            return null;
-        if (t.right == null)
-            return t.right;
-        return findMin(t.right);
+            return new Node<T>(x);
+
+        int comparison = x.compareTo(t.data);
+
+        if (comparison > 0) {
+            t.right = insert(x, t.right);
+        } else if (comparison < 0) {
+            t.left = insert(x, t.left);
+        }
+
+        return t;
+    }
+
+    public void remove(T x) {
+        root = remove(x, root);
+    }
+
+    private Node<T> remove(T x, Node<T> t) {
+        if (t == null)
+            return t; // not found (do nothing)
+
+        int comparison = x.compareTo(t.data);
+
+        if (comparison > 0) {
+            t.right = remove(x, t.right);
+        } else if (comparison < 0) {
+            t.left = remove(x, t.left);
+        } else {
+            // found node
+            if (t.right == null && t.left == null) { // leaf
+                return null;
+            } else if (t.right == null ^ t.left == null) { // single child
+                if (t.right == null) {
+                    return t.left;
+                } else {
+                    return t.right;
+                }
+            } else { // double child
+                // inorder predecessor
+                Node<T> predecessor = findMax(t.left);
+                t.data = predecessor.data;
+                t.left = remove(predecessor.data, t.left);
+            }
+        }
+        return t;
+    }
+
+    public T findMax() {
+        return findMax(root).data;
     }
 
     private Node<T> findMax(Node<T> t) {
         if (t == null)
             return null;
+        if (t.right == null)
+            return t;
+        return findMax(t.right);
+    }
+
+    public T findMin() {
+        return findMin(root).data;
+    }
+
+    private Node<T> findMin(Node<T> t) {
+        if (t == null)
+            return null;
         if (t.left == null)
-            return t.left;
+            return t;
         return findMin(t.left);
     }
 }

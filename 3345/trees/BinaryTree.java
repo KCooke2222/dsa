@@ -3,8 +3,6 @@ package trees;
 
 import java.util.*;
 
-import lists.MyArrayList;
-
 public class BinaryTree<T extends Comparable<? super T>> implements Iterable<T> {
     protected static class Node<T> {
         T data;
@@ -22,8 +20,8 @@ public class BinaryTree<T extends Comparable<? super T>> implements Iterable<T> 
         }
     }
 
-    private int size;
-    private Node<T> root;
+    protected int size;
+    protected Node<T> root;
 
     // create null
     public BinaryTree() {
