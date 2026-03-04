@@ -90,7 +90,7 @@ public class BinarySearchTree<T extends Comparable<? super T>> extends BinaryTre
         return n.data;
     }
 
-    private Node<T> findMax(Node<T> t) {
+    protected Node<T> findMax(Node<T> t) {
         if (t == null)
             return null;
         if (t.right == null)
@@ -105,7 +105,7 @@ public class BinarySearchTree<T extends Comparable<? super T>> extends BinaryTre
         return n.data;
     }
 
-    private Node<T> findMin(Node<T> t) {
+    protected Node<T> findMin(Node<T> t) {
         if (t == null)
             return null;
         if (t.left == null)
