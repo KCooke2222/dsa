@@ -113,7 +113,7 @@ Put in separate file/class (keeps BT clean).
 
 ### Adds splay step
 
-- After `contains`, `insert`, and sometimes `remove`
+- After `contains` (search)
   - `splay(accessedNode)` to root
 
 ### Rotations
