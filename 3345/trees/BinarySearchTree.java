@@ -14,7 +14,7 @@ public class BinarySearchTree<T extends Comparable<? super T>> extends BinaryTre
         return contains(x, root);
     }
 
-    protected boolean contains(T x, Node<T> t) {
+    private boolean contains(T x, Node<T> t) {
         if (t == null) {
             return false;
         }

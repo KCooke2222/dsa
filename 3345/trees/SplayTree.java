@@ -18,7 +18,26 @@ public class SplayTree<T extends Comparable<? super T>> extends BinarySearchTree
         super();
     }
 
-    // insert and remove same
+    // insert creates SplayNode so rotations can safely cast; remove same as BST
+    @Override
+    public void insert(T x) {
+        root = insert(x, root);
+    }
+
+    private Node<T> insert(T x, Node<T> t) {
+        if (t == null)
+            return new SplayNode<>(x);
+
+        int comparison = x.compareTo(t.data);
+
+        if (comparison > 0) {
+            t.right = insert(x, t.right);
+        } else if (comparison < 0) {
+            t.left = insert(x, t.left);
+        }
+
+        return t;
+    }
 
     // new contains
     @Override
@@ -106,8 +125,9 @@ public class SplayTree<T extends Comparable<? super T>> extends BinarySearchTree
 
             }
 
+            // attach splayed seciton back
             if (gg == null) {
-                root = newSub;
+                root = t;
                 break;
             } else if (gg.left == g) {
                 gg.left = t;
@@ -141,16 +161,6 @@ public class SplayTree<T extends Comparable<? super T>> extends BinarySearchTree
         ((SplayNode<T>) child).height = 1 + Math.max(h(child.left), h(child.right));
 
         return child;
-    }
-
-    private Node<T> doubleRotateLeftChild(Node<T> t) {
-        t.left = rotateRightChild(t.left);
-        return rotateLeftChild(t);
-    }
-
-    private Node<T> doubleRotateRightChild(Node<T> t) {
-        t.right = rotateLeftChild(t.right);
-        return rotateRightChild(t);
     }
 
     private int h(Node<T> n) {
